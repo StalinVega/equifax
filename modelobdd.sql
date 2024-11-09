@@ -45,3 +45,12 @@ CREATE TABLE IF NOT EXISTS transacciones_equifax.reportes (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_solicitud) REFERENCES transacciones_equifax.solicitudes(id_solicitud)
 );
+
+-- Tabla de acceso a procesos por usuario (relaciona los usuarios con los procesos disponibles)
+CREATE TABLE IF NOT EXISTS transacciones_equifax.acceso_procesos (
+    id_usuario INT NOT NULL,
+    id_proceso INT NOT NULL,
+    PRIMARY KEY (id_usuario, id_proceso),
+    FOREIGN KEY (id_usuario) REFERENCES transacciones_equifax.usuarios(id_usuario),
+    FOREIGN KEY (id_proceso) REFERENCES transacciones_equifax.procesos(id_proceso)
+);
