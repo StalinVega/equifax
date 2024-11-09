@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { ErrorResponse } from "../Interfaces/Errors/ErrorResponse";
 import { login } from "../Interfaces/AuthController";
 import { sequelize } from "./database";
+import { createUser } from "../Interfaces/UsuarioController";
 
 const cors = require("cors");
 const app = express();
@@ -14,8 +15,8 @@ app.use(express.json({ limit: "10mb" })); // Middleware para parsear JSON en las
 
 // Definir la ruta para login
 app.post("/auth/login", login);
-
-
+// CREAAR USUARIO
+app.post("/create-users", createUser);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
