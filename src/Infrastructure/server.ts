@@ -3,10 +3,11 @@ import { ErrorResponse } from "../Interfaces/Errors/ErrorResponse";
 import { login } from "../Interfaces/AuthController";
 import { sequelize } from "./database";
 import { createUser } from "../Interfaces/UsuarioController";
+import { AccesoProcesoController } from "../Interfaces/AccesoProcesoController";
 
 const cors = require("cors");
 const app = express();
-
+const accesoProcesoController = new AccesoProcesoController();
 const port = process.env.PORT || 3006;
 
 // Configuración básica de CORS
@@ -17,6 +18,9 @@ app.use(express.json({ limit: "10mb" })); // Middleware para parsear JSON en las
 app.post("/auth/login", login);
 // CREAAR USUARIO
 app.post("/create-users", createUser);
+
+// bisqueda de ID de proceso acorde al id de usuario
+app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
