@@ -12,8 +12,9 @@ CREATE TABLE IF NOT EXISTS transacciones_equifax.clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
-    documento_identidad VARCHAR(20) NOT NULL UNIQUE,
-    fecha_nacimiento DATE,
+    cedula VARCHAR(20) NOT NULL UNIQUE,
+    num_tramite VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

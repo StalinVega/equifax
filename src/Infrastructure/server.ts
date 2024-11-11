@@ -4,10 +4,12 @@ import { login } from "../Interfaces/AuthController";
 import { sequelize } from "./database";
 import { createUser } from "../Interfaces/UsuarioController";
 import { AccesoProcesoController } from "../Interfaces/AccesoProcesoController";
+import { ClienteController } from "../Interfaces/ClienteController";
 
 const cors = require("cors");
 const app = express();
 const accesoProcesoController = new AccesoProcesoController();
+const clienteController = new ClienteController();
 const port = process.env.PORT || 3006;
 
 // Configuración básica de CORS
@@ -18,7 +20,8 @@ app.use(express.json({ limit: "10mb" })); // Middleware para parsear JSON en las
 app.post("/auth/login", login);
 // CREAAR USUARIO
 app.post("/create-users", createUser);
-
+// CREAAR Cliente
+app.post("/add-cliente", clienteController.createClient);
 // bisqueda de ID de proceso acorde al id de usuario
 app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
 // Middleware para manejar errores globales
@@ -30,16 +33,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
 
-// sequelize.sync({ alter: true })
-//   .then(() => {
-//     console.log('Base de datos sincronizada');
-//     app.listen(3001, () => {
-//       console.log('Servidor corriendo en el puerto 3001');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error al sincronizar la base de datos:', error);
-//   });
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('Base de datos sincronizada');
+    app.listen(3001, () => {
+      console.log('Servidor corriendo en el puerto 3001');
+    });
+  })
+  .catch((error) => {
+    console.error('Error al sincronizar la base de datos:', error);
+  });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
