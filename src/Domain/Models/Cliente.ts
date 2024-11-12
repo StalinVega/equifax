@@ -1,10 +1,10 @@
 import moment from "moment-timezone";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
+import { Solicitud } from "./Solicitud";
 
 export class Cliente extends Model {
     public id!: number;
-    public idProceso!: number;
     public nombre!: string;
     public apellido!: string;
     public correo!: string;
@@ -29,11 +29,6 @@ export class Cliente extends Model {
         primaryKey: true,
         autoIncrement: true,
         field: "id_cliente",
-      },
-      idProceso: {
-        type: DataTypes.STRING(100),
-        allowNull: true,
-        field: "id_proceso",
       },
       nombre: {
         type: DataTypes.STRING(100),
@@ -70,3 +65,4 @@ export class Cliente extends Model {
       timestamps: true,
     }
   );
+

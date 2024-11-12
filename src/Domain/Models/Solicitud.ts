@@ -1,6 +1,8 @@
 import moment from "moment-timezone";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
+import { Cliente } from "./Cliente";
+import { Usuario } from "./Usuario";
 export class Solicitud extends Model {
   public id!: number;
   public idCliente!: number;
@@ -28,23 +30,20 @@ Solicitud.init(
     },
     idCliente: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       field: "id_cliente",
     },
     idProceso: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       field: "id_proceso",
     },
     idUsuario: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       field: "id_usuario",
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      field: "fecha_creacion", 
+      field: "fecha_solicitud", 
     },
   },
   {
@@ -53,3 +52,10 @@ Solicitud.init(
     tableName: 'solicitudes',
     timestamps: true,
   })
+
+// // Relación: Cada solicitud pertenece a un cliente, un proceso y un usuario
+Solicitud.belongsTo(Cliente, { foreignKey: 'id_cliente'});
+Cliente.hasMany(Solicitud, { foreignKey: 'id_cliente'});
+
+Solicitud.belongsTo(Usuario, { foreignKey: 'id_usuario'});
+Usuario.hasMany(Solicitud, { foreignKey: 'id_usuario'});

@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS transacciones_equifax.solicitudes (
     id_proceso INT NOT NULL,
     id_usuario INT NOT NULL,
     fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    estado ENUM('pendiente', 'completado', 'rechazado') DEFAULT 'pendiente',
     FOREIGN KEY (id_cliente) REFERENCES transacciones_equifax.clientes(id_cliente),
     FOREIGN KEY (id_proceso) REFERENCES transacciones_equifax.procesos(id_proceso),
     FOREIGN KEY (id_usuario) REFERENCES transacciones_equifax.usuarios(id_usuario)

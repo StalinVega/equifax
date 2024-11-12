@@ -2,6 +2,7 @@
 import { sequelize } from '../../Infrastructure/database';
 import { Model, DataTypes } from 'sequelize';
 import moment from 'moment-timezone';
+import { Solicitud } from './Solicitud';
 
 export class Usuario extends Model {
   public id!: number;
@@ -60,5 +61,3 @@ Usuario.init(
     timestamps: true,
   }
 );
-
-

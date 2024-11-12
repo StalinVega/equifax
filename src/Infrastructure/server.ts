@@ -20,12 +20,16 @@ app.use(express.json({ limit: "10mb" })); // Middleware para parsear JSON en las
 app.post("/auth/login", login);
 // CREAAR USUARIO
 app.post("/create-users", createUser);
-// CREAAR Cliente
+// CREAAR Cliente y a la vez se crea la solicitud
 app.post("/add-cliente", clienteController.createClient);
 // busqueda de ID de proceso acorde al id de usuario
 app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
 //Ingresar Numero de tramite deacuerdo al numero de cedula
 app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
+
+// Ruta para obtener los clientes vinculados a un usuario
+app.get('/clientes/:userId', clienteController.getClientsByUserId);
+
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
