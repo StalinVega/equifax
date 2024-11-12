@@ -10,8 +10,11 @@ const clientService = new ClienteService();
 export class ClienteController{
   public async createClient(req: Request, res: Response): Promise<void>{
     try {
-      const user = await clientService.createClient(req.body);
-      const response = new ApiResponse(201, 'Usuario creado correctamente', user);
+      
+      // Obtener datos del cuerpo de la solicitud
+      const { clienteData, solicitudData } = req.body;
+      const user = await clientService.createClientWithSolicitud(clienteData, solicitudData);
+      const response = new ApiResponse(201, 'Usuario creado correctamente', []);
       res.status(201).json(response);
     } catch (error) {
       handleErrorResponse(res, error, 'No se pudo crear el usuario');
