@@ -33,16 +33,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
 
-sequelize.sync({ alter: true })
-  .then(() => {
-    console.log('Base de datos sincronizada');
-    app.listen(3001, () => {
-      console.log('Servidor corriendo en el puerto 3001');
-    });
-  })
-  .catch((error) => {
-    console.error('Error al sincronizar la base de datos:', error);
-  });
+// sequelize.sync({ alter: true })
+//   .then(() => {
+//     console.log('Base de datos sincronizada');
+//     app.listen(3001, () => {
+//       console.log('Servidor corriendo en el puerto 3001');
+//     });
+//   })
+//   .catch((error) => {
+//     console.error('Error al sincronizar la base de datos:', error);
+//   });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

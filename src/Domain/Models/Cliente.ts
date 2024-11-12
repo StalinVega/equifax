@@ -7,6 +7,7 @@ export class Cliente extends Model {
     public nombre!: string;
     public apellido!: string;
     public correo!: string;
+    public cedula!: string;
     public numTramite!: string;
     public createdAt!: Date;
   
@@ -33,6 +34,10 @@ export class Cliente extends Model {
         allowNull: false,
       },
       apellido: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      cedula: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
