@@ -22,8 +22,10 @@ app.post("/auth/login", login);
 app.post("/create-users", createUser);
 // CREAAR Cliente
 app.post("/add-cliente", clienteController.createClient);
-// bisqueda de ID de proceso acorde al id de usuario
+// busqueda de ID de proceso acorde al id de usuario
 app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
+//Ingresar Numero de tramite deacuerdo al numero de cedula
+app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
