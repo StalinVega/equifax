@@ -4,6 +4,7 @@ import { sequelize } from '../../Infrastructure/database';
 
 export class Cliente extends Model {
     public id!: number;
+    public idProceso!: number;
     public nombre!: string;
     public apellido!: string;
     public correo!: string;
@@ -28,6 +29,11 @@ export class Cliente extends Model {
         primaryKey: true,
         autoIncrement: true,
         field: "id_cliente",
+      },
+      idProceso: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        field: "id_proceso",
       },
       nombre: {
         type: DataTypes.STRING(100),
