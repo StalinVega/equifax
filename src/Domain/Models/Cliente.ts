@@ -43,7 +43,7 @@ export class Cliente extends Model {
       },
       numTramite: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
         field: "num_tramite",
       },
       correo: {
