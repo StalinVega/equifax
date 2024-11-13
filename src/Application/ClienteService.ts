@@ -52,16 +52,22 @@ export class ClienteService {
     }
   }
 
- // Método para obtener los clientes vinculados a un usuario con paginación
- public async getClientsByUserId(userId: number, page: number = 1, limit: number = 10): Promise<Cliente[]> {
+ // Método para obtener los clientes vinculados a un usuario y un idProceso con paginación
+public async getClientsByUserIdAndProcess(userId: number, idProceso?: number, page: number = 1, limit: number = 10): Promise<Cliente[]> {
   const offset = (page - 1) * limit; // Calcular el desplazamiento para la paginación
 
-  // Consulta de clientes vinculados a este usuario con paginación
+  // Construcción dinámica de condiciones para la consulta
+  const whereConditions: any = { idUsuario: userId };
+  if (idProceso) {
+    whereConditions.idProceso = idProceso; // Agregar filtro de idProceso si se proporciona
+  }
+
+  // Consulta de clientes vinculados a este usuario y opcionalmente a un idProceso con paginación
   const clientes = await Cliente.findAll({
     include: [
       {
         model: Solicitud,
-        where: { idUsuario: userId },
+        where: whereConditions,
         required: true,
         attributes: ['idProceso']
       },
@@ -70,8 +76,8 @@ export class ClienteService {
     offset: offset, // Aplicar el desplazamiento
   });
 
-   // Transformación de la respuesta para aplanar idProceso en cada cliente
-   const formattedClientes = clientes.map(cliente => {
+  // Transformación de la respuesta para aplanar idProceso en cada cliente
+  const formattedClientes = clientes.map(cliente => {
     const clienteData = cliente.toJSON();
     clienteData.idProceso = clienteData.Solicituds[0]?.idProceso; // Extrae idProceso del primer elemento de Solicituds
     delete clienteData.Solicituds; // Elimina el array Solicituds de la respuesta
@@ -80,5 +86,6 @@ export class ClienteService {
 
   return formattedClientes;
 }
+
 }
 
