@@ -63,14 +63,22 @@ export class ClienteService {
         model: Solicitud,
         where: { idUsuario: userId },
         required: true,
-        attributes: []
+        attributes: ['idProceso']
       },
     ],
     limit: limit, // Establecer el límite de resultados
     offset: offset, // Aplicar el desplazamiento
   });
 
-  return clientes;
+   // Transformación de la respuesta para aplanar idProceso en cada cliente
+   const formattedClientes = clientes.map(cliente => {
+    const clienteData = cliente.toJSON();
+    clienteData.idProceso = clienteData.Solicituds[0]?.idProceso; // Extrae idProceso del primer elemento de Solicituds
+    delete clienteData.Solicituds; // Elimina el array Solicituds de la respuesta
+    return clienteData;
+  });
+
+  return formattedClientes;
 }
 }
 

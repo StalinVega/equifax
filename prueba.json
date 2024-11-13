@@ -1,0 +1,29 @@
+{
+    "status": 200,
+    "message": "Clientes encontrados",
+    "data": [
+        {
+            "id": 27,
+            "nombre": "Juan",
+            "apellido": "Perez",
+            "cedula": "1234567890",
+            "numTramite": "ABC123",
+            "correo": "juan.perez@example.com",
+            "createdAt": "2024-11-12T14:49:23-05:00",
+            "updatedAt": "2024-11-12T19:49:23.000Z",
+            "idProceso": 1
+            
+        },
+        {
+            "id": 28,
+            "nombre": "Juan",
+            "apellido": "Perez",
+            "cedula": "1234567890",
+            "numTramite": "ABC123",
+            "correo": "juan.perez@example.com",
+            "createdAt": "2024-11-12T14:52:00-05:00",
+            "updatedAt": "2024-11-12T19:52:00.000Z",
+            "idProceso": 1
+        }
+    ]
+}
