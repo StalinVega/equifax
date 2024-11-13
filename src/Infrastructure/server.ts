@@ -28,7 +28,7 @@ app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
 app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
 
 // Ruta para obtener los clientes vinculados a un usuario
-app.get('/clientes/:userId', clienteController.getClientsByUserId);
+app.get('/clientes/:userId', clienteController.getClientsByUserIdAndProcess);
 
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
