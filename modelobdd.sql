@@ -54,3 +54,25 @@ CREATE TABLE IF NOT EXISTS transacciones_equifax.acceso_procesos (
     FOREIGN KEY (id_usuario) REFERENCES transacciones_equifax.usuarios(id_usuario),
     FOREIGN KEY (id_proceso) REFERENCES transacciones_equifax.procesos(id_proceso)
 );
+
+
+CREATE TABLE IF NOT EXISTS transacciones_equifax.paquetes_transacciones (
+    id_paquete INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_proceso INT NOT NULL,
+    cantidad_comprada INT NOT NULL,
+    cantidad_restante INT NOT NULL,
+    fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_cliente) REFERENCES transacciones_equifax.clientes(id_cliente),
+    FOREIGN KEY (id_proceso) REFERENCES transacciones_equifax.procesos(id_proceso)
+);
+
+CREATE TABLE IF NOT EXISTS transacciones_equifax.consumo_transacciones (
+    id_consumo INT AUTO_INCREMENT PRIMARY KEY,
+    id_paquete INT NOT NULL,
+    id_solicitud INT NOT NULL,
+    cantidad_usada INT NOT NULL DEFAULT 0,
+    fecha_consumo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_paquete) REFERENCES transacciones_equifax.paquetes_transacciones(id_paquete),
+    FOREIGN KEY (id_solicitud) REFERENCES transacciones_equifax.solicitudes(id_solicitud)
+);

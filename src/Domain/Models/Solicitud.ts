@@ -3,6 +3,7 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
 import { Cliente } from "./Cliente";
 import { Usuario } from "./Usuario";
+import { ConsumoTransacciones } from "./consumoTransacciones";
 export class Solicitud extends Model {
   public id!: number;
   public idCliente!: number;
@@ -59,3 +60,13 @@ Cliente.hasMany(Solicitud, { foreignKey: 'id_cliente'});
 
 Solicitud.belongsTo(Usuario, { foreignKey: 'id_usuario'});
 Usuario.hasMany(Solicitud, { foreignKey: 'id_usuario'});
+
+// Solicitud.ts
+ConsumoTransacciones.belongsTo(Solicitud, {
+  foreignKey: "id_solicitud",
+  as: "solicitud",
+});
+Solicitud.hasMany(ConsumoTransacciones, {
+  foreignKey: "id_solicitud",
+  as: "consumos",
+});
