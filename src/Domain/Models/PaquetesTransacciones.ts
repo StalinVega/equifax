@@ -1,12 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
 import { ConsumoTransacciones } from "./consumoTransacciones";
-import { Cliente } from "./Cliente";
-import { Proceso } from "./Proceso";
+
 
 export class PaqueteTransacciones extends Model {
     public idPaquete!: number;
-    public idCliente!: number;
+    public idUsuario!: number;
     public idProceso!: number;
     public cantidadComprada!: number;
     public cantidadRestante!: number;
@@ -21,10 +20,10 @@ PaqueteTransacciones.init(
             primaryKey: true,
             field: "id_paquete",
         },
-        idCliente: {
+        idUsuario: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            field: "id_cliente",
+            field: "id_usuario",
         },
         idProceso: {
             type: DataTypes.INTEGER,

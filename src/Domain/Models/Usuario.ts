@@ -3,6 +3,7 @@ import { sequelize } from '../../Infrastructure/database';
 import { Model, DataTypes } from 'sequelize';
 import moment from 'moment-timezone';
 import { Solicitud } from './Solicitud';
+import { PaqueteTransacciones } from './PaquetesTransacciones';
 
 export class Usuario extends Model {
   public id!: number;
@@ -61,3 +62,13 @@ Usuario.init(
     timestamps: true,
   }
 );
+
+
+PaqueteTransacciones.belongsTo(Usuario, {
+  foreignKey: "id_usuario",
+  as: "usuario",
+});
+Usuario.hasMany(PaqueteTransacciones, {
+foreignKey: "id_usuario",
+as: "paquetes",
+});

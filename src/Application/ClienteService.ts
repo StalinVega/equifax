@@ -40,7 +40,7 @@ export class ClienteService {
 
       // Crear la solicitud
       const solicitud = await solicitudService.crearSolicitud(solicitudData);
-
+      
       // Confirmar la transacción
       await transaction.commit();
 

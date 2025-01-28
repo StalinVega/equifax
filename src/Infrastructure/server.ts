@@ -5,6 +5,7 @@ import { sequelize } from "./database";
 import { createUser } from "../Interfaces/UsuarioController";
 import { AccesoProcesoController } from "../Interfaces/AccesoProcesoController";
 import { ClienteController } from "../Interfaces/ClienteController";
+import { PaqueteTransaccionesController } from "../Interfaces/PaqueteTransaccionesController";
 
 const cors = require("cors");
 const app = express();
@@ -30,6 +31,19 @@ app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
 // Ruta para obtener los clientes vinculados a un usuario
 app.get('/clientes/:userId', clienteController.getClientsByUserIdAndProcess);
 
+//Total de transacciones a utilizar
+app.get("/paquete-transacciones/:idUsuario", PaqueteTransaccionesController.obtenerTotalFirmas);
+// Endpoint para obtener el total de transacciones compradas por usuario y proceso
+app.get(
+    "/paquete-transacciones/total/:idUsuario/:idProceso",
+    PaqueteTransaccionesController.obtenerTotalFirmasPorProceso
+);
+
+// Endpoint para obtener la cantidad de transacciones restantes por usuario y proceso
+app.get(
+    "/paquete-transacciones/restantes/:idUsuario/:idProceso",
+    PaqueteTransaccionesController.obtenerFirmasRestantesPorProceso
+);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);

@@ -67,13 +67,6 @@ export class Cliente extends Model {
     }
   );
 
-// Cliente.ts
 
-PaqueteTransacciones.belongsTo(Cliente, {
-    foreignKey: "id_cliente",
-    as: "cliente",
-});
-Cliente.hasMany(PaqueteTransacciones, {
-  foreignKey: "id_cliente",
-  as: "paquetes",
-});
+
+
