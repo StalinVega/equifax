@@ -1,7 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
-import { PaqueteTransacciones } from "./PaquetesTransacciones";
-import { Solicitud } from "./Solicitud";
+
 
 export class ConsumoTransacciones extends Model {
     public idConsumo!: number;

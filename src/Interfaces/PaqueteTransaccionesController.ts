@@ -5,6 +5,20 @@ import { PaqueteTransaccionesService } from "../Application/PaqueteTransacciones
 const paqueteTransaccionesService = new PaqueteTransaccionesService();
 
 export class PaqueteTransaccionesController {
+
+
+
+
+    public static async crearPaquete(req: Request, res: Response) {
+        try {
+            const paquete = await paqueteTransaccionesService.crearPaquete(req.body);
+            res.status(201).json(paquete);
+        } catch (error) {
+            res.status(500).json({ error: error});
+        }
+    }
+
+
     /**
      * Endpoint para obtener el total de transacciones de un usuario.
      */

@@ -3,6 +3,10 @@ import { PaqueteTransacciones } from "../Domain/Models/PaquetesTransacciones";
 
 export class PaqueteTransaccionesService {
 
+    public async crearPaquete(data: any) {
+        return await PaqueteTransacciones.create(data);
+    }
+
      /**
      * Obtiene el total de firmas electrónicas de un usuario.
      * @param idUsuario ID del usuario.
@@ -83,4 +87,6 @@ export class PaqueteTransaccionesService {
             throw new Error("No se pudo obtener las firmas restantes por proceso.");
         }
     }
+
+
 }
