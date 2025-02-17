@@ -19,11 +19,8 @@ export class SolicitudController {
      */
    static async obtenerSolicitudPorId(req: Request, res: Response) {
     try {
-
-        console.log("🔹 Parámetros recibidos:", req.params); 
         const idSolicitud = parseInt(req.params.idSolicitud);
 
-        console.log("🔹 ID convertido:", idSolicitud); 
         if (isNaN(idSolicitud)) {
             return res.status(400).json({ message: "El ID de solicitud no es válido" });
         }

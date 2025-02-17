@@ -15,7 +15,7 @@ export class ClienteController{
       // Obtener datos del cuerpo de la solicitud
       const { clienteData, solicitudData } = req.body;
       const user = await clientService.createClientWithSolicitud(clienteData, solicitudData);
-      const response = new ApiResponse(201, 'Usuario creado correctamente', []);
+      const response = new ApiResponse(201, 'Usuario creado correctamente', [user]);
       res.status(201).json(response);
     } catch (error) {
       handleErrorResponse(res, error, 'No se pudo crear el usuario');
