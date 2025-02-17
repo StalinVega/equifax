@@ -13,7 +13,7 @@ const cors = require("cors");
 const app = express();
 const accesoProcesoController = new AccesoProcesoController();
 const clienteController = new ClienteController();
-const port = process.env.PORT || 3004;
+const port = process.env.PORT || 3006;
 
 // Configuración básica de CORS
 app.use(cors());

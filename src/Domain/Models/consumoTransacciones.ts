@@ -4,6 +4,7 @@ import { sequelize } from '../../Infrastructure/database';
 
 export class ConsumoTransacciones extends Model {
     public idConsumo!: number;
+    public idPaquete!: number;
     public idSolicitud!: number;
     public cantidadUsada!: number;
     public fechaConsumo!: Date;
@@ -16,6 +17,11 @@ ConsumoTransacciones.init(
             autoIncrement: true,
             primaryKey: true,
             field: "id_consumo",
+        },
+        idPaquete: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            field: "id_paquete",
         },
         idSolicitud: {
             type: DataTypes.INTEGER,
