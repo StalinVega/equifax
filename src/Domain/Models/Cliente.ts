@@ -1,8 +1,7 @@
 import moment from "moment-timezone";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
-import { Solicitud } from "./Solicitud";
-import { PaqueteTransacciones } from "./PaquetesTransacciones";
+
 
 export class Cliente extends Model {
     public id!: number;
