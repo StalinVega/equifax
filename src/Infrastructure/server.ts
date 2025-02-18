@@ -8,6 +8,7 @@ import { ClienteController } from "../Interfaces/ClienteController";
 import { PaqueteTransaccionesController } from "../Interfaces/PaqueteTransaccionesController";
 import { ConsumoTransaccionesController } from "../Interfaces/ConsumoTransaccionesController";
 import { SolicitudController } from "../Interfaces/SolicitudController";
+import { obtenerIdPaquetePorClienteYSolicitud } from "../Application/ConsumoTransaccionesServices";
 
 const cors = require("cors");
 const app = express();
@@ -51,6 +52,8 @@ app.get(
 app.post('/consumos', ConsumoTransaccionesController.consumir);
 //Solicitud
 app.get('/solicitud/:idSolicitud', SolicitudController.obtenerSolicitudPorId);
+// Endpoint para obtener el idPaquete correcto
+app.post('/obtener-id-paquete', ConsumoTransaccionesController.obtenerIdPaquete);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
