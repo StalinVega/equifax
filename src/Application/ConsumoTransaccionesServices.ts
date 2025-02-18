@@ -60,24 +60,18 @@ export async function obtenerIdPaquetePorClienteYSolicitud(idCliente: number, id
         throw new Error('Solicitud no encontrada o no pertenece al cliente');
     }
 
-    // 2️⃣ Obtener el id_usuario de la solicitud
-    const idUsuario = solicitud.idUsuario;
-    const idProcesoSolicitud = solicitud.idProceso;
+    // 2️⃣ Obtener el id_usuario y el id_proceso de la solicitud
+    const { idUsuario, idProceso } = solicitud;
 
-    // 3️⃣ Buscar el paquete correspondiente al id_usuario
+    // 3️⃣ Buscar el paquete correspondiente al id_usuario y al id_proceso de la solicitud
     const paquete = await PaqueteTransacciones.findOne({
-        where: { id_usuario: idUsuario }
+        where: { idUsuario, idProceso }
     });
 
     if (!paquete) {
-        throw new Error('No se encontró un paquete para este usuario');
+        throw new Error('No se encontró un paquete válido para este usuario y proceso');
     }
 
-    // 4️⃣ Validar que el id_proceso del paquete coincida con el id_proceso de la solicitud
-    if (paquete.idProceso !== idProcesoSolicitud) {
-        throw new Error('El proceso del paquete no coincide con el proceso de la solicitud');
-    }
-
-    // 5️⃣ Devolver el idPaquete encontrado
+    // 4️⃣ Devolver el idPaquete encontrado
     return paquete.idPaquete;
 }
