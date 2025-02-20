@@ -2,7 +2,6 @@
 import { sequelize } from '../../Infrastructure/database';
 import { Model, DataTypes } from 'sequelize';
 import moment from 'moment-timezone';
-import { Solicitud } from './Solicitud';
 import { PaqueteTransacciones } from './PaquetesTransacciones';
 
 export class Usuario extends Model {
@@ -11,6 +10,7 @@ export class Usuario extends Model {
   public email!: string;
   public password!: string;
   public role!: "almacen" | "admin";
+  public idEmpresa!: number; 
   public createdAt!: Date;
 
   // Transformacion de la fecha y hora
@@ -33,7 +33,6 @@ Usuario.init(
     },
     username: {
       type: DataTypes.STRING(50),
-      allowNull: false,
     },
     email: {
       type: DataTypes.STRING(50),
@@ -49,9 +48,12 @@ Usuario.init(
       allowNull: false,
       field: "rol",
     },
+    idEmpresa: {
+      type: DataTypes.INTEGER,
+      field: "id_empresa",
+    },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false,
       field: "fecha_creacion", 
     },
   },
@@ -59,7 +61,7 @@ Usuario.init(
     sequelize,
     modelName: 'Usuario',
     tableName: 'usuarios',
-    timestamps: true,
+    timestamps: false,
   }
 );
 
