@@ -62,4 +62,11 @@ export class EmpresaService {
       throw new Error("Error al crear la empresa y los usuarios.");
     }
   }
+
+   /**
+   * Obtener todas las empresas.
+   */
+   public static async obtenerEmpresas() {
+    return await Empresa.findAll();
+  }
 }

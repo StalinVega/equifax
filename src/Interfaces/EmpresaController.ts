@@ -32,4 +32,22 @@ export class EmpresaController {
         });
       }
     }
+
+     /**
+   * Obtener todas las empresas.
+   */
+  public static async obtenerEmpresas(req: Request, res: Response) {
+    try {
+      const empresas = await EmpresaService.obtenerEmpresas();
+      return res.status(200).json({
+        message: "Empresas obtenidas exitosamente.",
+        data: empresas,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        message: "Error al obtener las empresas.",
+        error: error.message,
+      });
+    }
+  }
   }

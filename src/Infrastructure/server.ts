@@ -58,6 +58,10 @@ app.post('/obtener-id-paquete', ConsumoTransaccionesController.obtenerIdPaquete)
 
 //Creacion de empresa y usuarios
 app.post("/empresa-usuarios", EmpresaController.crearEmpresaConUsuarios);
+
+// Obtener todas las empresas
+app.get("/lista-empresas", EmpresaController.obtenerEmpresas);
+
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
