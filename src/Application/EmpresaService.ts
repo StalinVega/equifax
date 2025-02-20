@@ -45,7 +45,9 @@ export class EmpresaService {
           Usuario.create(
             {
               ...usuario,
+
               idEmpresa: empresa.id, // Asociar el usuario a la empresa
+              username: usuario.email
             },
             { transaction }
           )
