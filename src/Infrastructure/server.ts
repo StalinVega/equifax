@@ -63,7 +63,7 @@ app.put("/accesos/:idUsuario/:idProceso", accesoProcesoController.actualizarAcce
 // crear paqeutes de trasnaciones
 app.post("/ingreso-paquetes",PaqueteTransaccionesController.crearPaquete);
 // Endpoint para generar el texto dinámico
-app.post("/empresas/generar-texto/:idEmpresa", EmpresaController.generarTexto);
+app.post("/empresas/generar-texto/:idEmpresa", EmpresaController.generarTextoYPDF);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
