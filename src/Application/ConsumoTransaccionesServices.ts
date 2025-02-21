@@ -2,6 +2,7 @@ import { sequelize } from "../Infrastructure/database";
 import { ConsumoTransacciones } from "../Domain/Models/consumoTransacciones";
 import { PaqueteTransacciones } from "../Domain/Models/PaquetesTransacciones";
 import { Solicitud } from "../Domain/Models/Solicitud";
+import { Usuario } from "../Domain/Models/Usuario";
 
 
 
@@ -19,25 +20,44 @@ export class ConsumoTransaccionesService {
     
             if (!paquete) throw new Error('Paquete no encontrado');
     
-            // 2️⃣ Verificar que la solicitud existe y pertenece al mismo usuario que compró el paquete
+            // 2️⃣ Verificar que la solicitud existe
             const solicitud = await Solicitud.findOne({
-                where: { id_solicitud: data.idSolicitud, id_usuario: paquete.idUsuario },
+                where: { id_solicitud: data.idSolicitud },
                 transaction,
             });
     
-            if (!solicitud) throw new Error('La solicitud no pertenece al usuario del paquete');
+            if (!solicitud) throw new Error('Solicitud no encontrada');
     
-            // 3️⃣ Verificar saldo suficiente
-            if (paquete.cantidadRestante < data.cantidadUsada) throw new Error('Saldo insuficiente');
+            // 3️⃣ Verificar que el usuario de la solicitud pertenece a la misma empresa que el paquete
+            const usuario = await Usuario.findOne({
+                where: { id_usuario: solicitud.idUsuario },
+                transaction,
+            });
     
-            // 4️⃣ Actualizar la cantidad restante en el paquete
+            if (!usuario || usuario.idEmpresa !== paquete.idEmpresa) {
+                throw new Error('El usuario de la solicitud no pertenece a la empresa del paquete');
+            }
+    
+            // 4️⃣ Verificar saldo suficiente en el paquete
+            if (paquete.cantidadRestante < data.cantidadUsada) {
+                throw new Error('Saldo insuficiente en el paquete');
+            }
+    
+            // 5️⃣ Actualizar la cantidad restante en el paquete
             paquete.cantidadRestante -= data.cantidadUsada;
             await paquete.save({ transaction });
     
-            // 5️⃣ Registrar el consumo
-            const consumo = await ConsumoTransacciones.create(data, { transaction });
+            // 6️⃣ Registrar el consumo
+            const consumo = await ConsumoTransacciones.create(
+                {
+                    id_paquete: data.idPaquete,
+                    id_solicitud: data.idSolicitud,
+                    cantidad_usada: data.cantidadUsada,
+                },
+                { transaction }
+            );
     
-            // 6️⃣ Confirmar transacción
+            // 7️⃣ Confirmar transacción
             await transaction.commit();
     
             return consumo;

@@ -2,6 +2,7 @@ import moment from "moment-timezone";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from '../../Infrastructure/database';
 import { Usuario } from "./Usuario"; // Importa el modelo Usuario para las relaciones
+import { PaqueteTransacciones } from "./PaquetesTransacciones";
 
 export class Empresa extends Model {
   public id!: number;
@@ -78,3 +79,12 @@ Empresa.init(
 // Relación: Una empresa tiene muchos usuarios
 Empresa.hasMany(Usuario, { foreignKey: 'id_empresa', as: 'usuarios' });
 Usuario.belongsTo(Empresa, { foreignKey: 'id_empresa', as: 'empresa' });
+
+PaqueteTransacciones.belongsTo(Empresa, {
+  foreignKey: "id_empresa",
+  as: "empresa",
+});
+Empresa.hasMany(PaqueteTransacciones, {
+foreignKey: "id_empresa",
+as: "paquetes",
+});

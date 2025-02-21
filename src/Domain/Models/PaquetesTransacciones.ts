@@ -5,7 +5,7 @@ import { ConsumoTransacciones } from "./consumoTransacciones";
 
 export class PaqueteTransacciones extends Model {
     public idPaquete!: number;
-    public idUsuario!: number;
+    public idEmpresa!: number;
     public idProceso!: number;
     public cantidadComprada!: number;
     public cantidadRestante!: number;
@@ -20,10 +20,10 @@ PaqueteTransacciones.init(
             primaryKey: true,
             field: "id_paquete",
         },
-        idUsuario: {
+        idEmpresa: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            field: "id_usuario",
+            field: "id_empresa",
         },
         idProceso: {
             type: DataTypes.INTEGER,

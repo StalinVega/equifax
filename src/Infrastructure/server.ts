@@ -8,7 +8,6 @@ import { ClienteController } from "../Interfaces/ClienteController";
 import { PaqueteTransaccionesController } from "../Interfaces/PaqueteTransaccionesController";
 import { ConsumoTransaccionesController } from "../Interfaces/ConsumoTransaccionesController";
 import { SolicitudController } from "../Interfaces/SolicitudController";
-import { obtenerIdPaquetePorClienteYSolicitud } from "../Application/ConsumoTransaccionesServices";
 import { EmpresaController } from "../Interfaces/EmpresaController";
 
 const cors = require("cors");
@@ -35,19 +34,11 @@ app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
 // Ruta para obtener los clientes vinculados a un usuario
 app.get('/clientes/:userId', clienteController.getClientsByUserIdAndProcess);
 
-//Total de transacciones a utilizar
-app.get("/paquete-transacciones/:idUsuario", PaqueteTransaccionesController.obtenerTotalFirmas);
-// Endpoint para obtener el total de transacciones compradas por usuario y proceso
-app.get(
-    "/paquete-transacciones/total/:idUsuario/:idProceso",
-    PaqueteTransaccionesController.obtenerTotalFirmasPorProceso
-);
+// Endpoint para obtener el saldo disponible de transacciones por empresa y proceso
+app.get("/empresas/procesos-saldo/:idEmpresa/:idProceso", PaqueteTransaccionesController.obtenerSaldoDisponible);
 
-// Endpoint para obtener la cantidad de transacciones restantes por usuario y proceso
-app.get(
-    "/paquete-transacciones/restantes/:idUsuario/:idProceso",
-    PaqueteTransaccionesController.obtenerFirmasRestantesPorProceso
-);
+// Endpoint para obtener el saldo disponible de transacciones por empresa y proceso
+app.get("/empresas/procesos-total/:idEmpresa/:idProceso", PaqueteTransaccionesController.obtenerTotalComprada);
 
 // Consumos
 app.post('/consumos', ConsumoTransaccionesController.consumir);

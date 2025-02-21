@@ -66,11 +66,3 @@ Usuario.init(
 );
 
 
-PaqueteTransacciones.belongsTo(Usuario, {
-  foreignKey: "id_usuario",
-  as: "usuario",
-});
-Usuario.hasMany(PaqueteTransacciones, {
-foreignKey: "id_usuario",
-as: "paquetes",
-});
