@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Usuario } from '../Domain/Models/Usuario';
+import { Empresa } from '../Domain/Models/Empresas';
 
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -23,9 +24,14 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
        if (user.password!=password) {
         return res.status(400).json({ message: "La contraseña es incorrecta" });
       }
-  
+      const id=user.idEmpresa;
+      //Busca informacion de la empresa
+      const empresa = await Empresa.findOne({where:{id}});
+      if (!empresa) {
+        return res.status(400).json({ message: 'No existe un idEmpresa' });
+      }
       // Genera el token JWT
-      const token = jwt.sign({ id: user.id, email: user.email, username:user.username,idEmpresa: user.idEmpresa }, SECRET_KEY, {
+      const token = jwt.sign({ id: user.id, email: user.email, username:user.username,idEmpresa: user.idEmpresa,nombreEmpresa:empresa.nombreEmpresa }, SECRET_KEY, {
         expiresIn: '1h',
       });
   
