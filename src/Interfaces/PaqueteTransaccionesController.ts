@@ -12,7 +12,7 @@ export class PaqueteTransaccionesController {
     public static async crearPaquete(req: Request, res: Response) {
         try {
             const paquete = await paqueteTransaccionesService.crearPaquete(req.body);
-            res.status(201).json(paquete);
+            res.status(200).json({message:"Ingreso exitoso",paquete});
         } catch (error) {
             res.status(500).json({ error: error});
         }
