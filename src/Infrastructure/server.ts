@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { ErrorResponse } from "../Interfaces/Errors/ErrorResponse";
 import { login } from "../Interfaces/AuthController";
 import { sequelize } from "./database";
-import { createUser } from "../Interfaces/UsuarioController";
+import { createUser, obtenerUsuariosPorEmpresa } from "../Interfaces/UsuarioController";
 import { AccesoProcesoController } from "../Interfaces/AccesoProcesoController";
 import { ClienteController } from "../Interfaces/ClienteController";
 import { PaqueteTransaccionesController } from "../Interfaces/PaqueteTransaccionesController";
@@ -52,7 +52,16 @@ app.post("/empresa-usuarios", EmpresaController.crearEmpresaConUsuarios);
 
 // Obtener todas las empresas
 app.get("/lista-empresas", EmpresaController.obtenerEmpresas);
-
+//Permisos de usuario
+app.post("/acceso-proceso",accesoProcesoController.crearAccesoProceso);
+//Usuarios por empresas
+app.get("/lista-usuarios-empresa/:idEmpresa",obtenerUsuariosPorEmpresa);
+// actualziar datos de empresa
+app.put("/actualizar-empresa/:id",EmpresaController.updateEmpresa)
+// actualizar permisos
+app.put("/accesos/:idUsuario/:idProceso", accesoProcesoController.actualizarAcceso);
+// crear paqeutes de trasnaciones
+app.post("/ingreso-paquetes",PaqueteTransaccionesController.crearPaquete);
 // Middleware para manejar errores globales
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
