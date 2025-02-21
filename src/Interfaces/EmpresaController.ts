@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { EmpresaService } from "../Application/EmpresaService";
-
+import {reemplazarPlaceholders} from "../utils/reemplazarPlaceholders"
 export class EmpresaController {
     /**
      * Endpoint para crear una empresa y sus usuarios asociados.
@@ -78,4 +78,43 @@ export class EmpresaController {
       return res.status(500).json({ message: `Error al actualizar la empresa: ${error}` });
     }
   }
+
+
+  /**
+     * Endpoint para generar el texto dinámico.
+     */
+  public static async generarTexto(req: Request, res: Response) {
+    try {
+        const { idEmpresa } = req.params;
+        const datos = req.body; // Datos en formato JSON
+
+        // Validar que se proporcione el ID de la empresa y los datos
+        if (!idEmpresa || !datos) {
+            return res.status(400).json({
+                message: "Debe proporcionar el ID de la empresa y los datos en formato JSON.",
+            });
+        }
+
+        // Convertir el ID de la empresa a número
+        const idEmpresaNum = Number(idEmpresa);
+
+        // Obtener la plantilla desde la empresa
+        const plantilla = await EmpresaService.obtenerPlantilla(idEmpresaNum);
+
+        // Reemplazar los placeholders en la plantilla
+        const textoFinal = reemplazarPlaceholders(plantilla, datos);
+
+        // Respuesta exitosa
+        return res.status(200).json({
+            message: "Texto generado exitosamente.",
+            texto: textoFinal,
+        });
+    } catch (error: any) {
+        // Manejo de errores
+        return res.status(500).json({
+            message: "Error al generar el texto.",
+            error: error.message,
+        });
+    }
+}
   }

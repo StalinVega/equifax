@@ -91,4 +91,15 @@ export class EmpresaService {
   }
 
 
+  /**
+     * Obtiene la plantilla desde la base de datos.
+     */
+  public static async obtenerPlantilla(idEmpresa: number): Promise<string> {
+    const empresa = await Empresa.findByPk(idEmpresa);
+    if (!empresa) {
+        throw new Error("Empresa no encontrada.");
+    }
+    return empresa.textoDocumento;
+}
+
 }
