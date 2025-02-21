@@ -9,7 +9,10 @@ import { Usuario } from "../Domain/Models/Usuario";
 export class ConsumoTransaccionesService {
     public async consumirTransaccion(data: any) {
         const transaction = await sequelize.transaction(); // Iniciamos una transacción
-    
+        console.log("Datos recibidos:", data);
+        if (!data.idPaquete || !data.idSolicitud || !data.cantidadUsada) {
+            throw new Error("Datos incompletos para la transacción");
+        }
         try {
             // 1️⃣ Verificar que el paquete existe y bloquear la fila para evitar condiciones de carrera
             const paquete = await PaqueteTransacciones.findOne({
@@ -17,7 +20,7 @@ export class ConsumoTransaccionesService {
                 lock: transaction.LOCK.UPDATE, // Bloquea la fila hasta que termine la transacción
                 transaction,
             });
-    
+            console.log()
             if (!paquete) throw new Error('Paquete no encontrado');
     
             // 2️⃣ Verificar que la solicitud existe
@@ -50,9 +53,10 @@ export class ConsumoTransaccionesService {
             // 6️⃣ Registrar el consumo
             const consumo = await ConsumoTransacciones.create(
                 {
-                    id_paquete: data.idPaquete,
-                    id_solicitud: data.idSolicitud,
-                    cantidad_usada: data.cantidadUsada,
+                    idPaquete: data.idPaquete,
+                    idSolicitud: data.idSolicitud,
+                    cantidadUsada: data.cantidadUsada,
+                    fechaConsumo: data.fechaConsumo,
                 },
                 { transaction }
             );

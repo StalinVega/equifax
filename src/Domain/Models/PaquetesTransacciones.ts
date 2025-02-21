@@ -22,7 +22,6 @@ PaqueteTransacciones.init(
         },
         idEmpresa: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             field: "id_empresa",
         },
         idProceso: {
