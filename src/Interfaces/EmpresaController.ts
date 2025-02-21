@@ -50,4 +50,32 @@ export class EmpresaController {
       });
     }
   }
+
+  public static async updateEmpresa(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      const data = req.body;
+
+      if (!id || isNaN(id)) {
+        return res.status(400).json({ message: "ID de empresa inválido" });
+      }
+
+      // Verificar si la empresa existe antes de actualizar
+      const empresa = await EmpresaService.obtenerEmpresaPorId(id);
+      if (!empresa) {
+        return res.status(404).json({ message: `No se encontró la empresa con ID: ${id}` });
+      }
+
+      // Actualizar la empresa
+      const affectedCount = await EmpresaService.updateEmpresa(id, data);
+
+      if (affectedCount === 0) {
+        return res.status(200).json({ message: "No se realizaron cambios en la empresa" });
+      }
+
+      return res.status(200).json({ message: "Empresa actualizada exitosamente" });
+    } catch (error) {
+      return res.status(500).json({ message: `Error al actualizar la empresa: ${error}` });
+    }
+  }
   }

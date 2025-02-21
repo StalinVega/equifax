@@ -51,7 +51,7 @@ Empresa.init(
       field: "correo_responsable",
     },
     textoDocumento: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       field: "texto_documento",
     },
     responsableEquifax: {

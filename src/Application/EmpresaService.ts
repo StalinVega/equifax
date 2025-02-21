@@ -71,4 +71,24 @@ export class EmpresaService {
    public static async obtenerEmpresas() {
     return await Empresa.findAll();
   }
+
+  public static async obtenerEmpresaPorId(id: number): Promise<Empresa | null> {
+    try {
+      // Buscar empresa por su ID
+      const empresa = await Empresa.findByPk(id);
+  
+      // Retorna la empresa o null si no existe
+      return empresa;
+    } catch (error) {
+      throw new Error(`Error al obtener la empresa por ID: ${error}`);
+    }
+  }
+  
+
+  public static async updateEmpresa(id: number, data: Partial<Empresa>): Promise<number> {
+    const [affectedCount] = await Empresa.update(data, { where: { id } });
+    return affectedCount;
+  }
+
+
 }
