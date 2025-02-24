@@ -86,5 +86,27 @@ export class ClienteController{
       handleErrorResponse(res, error, 'No se pudo obtener los clientes vinculados al usuario y proceso');
     }
   }
+
+  async updateNumTramite(req: Request, res: Response): Promise<Response> {
+    try {
+      const { numTramite, nuevoNumTramite } = req.body; // Obtener datos del request
+
+      // Validar que ambos valores existan
+      if (!numTramite || !nuevoNumTramite) {
+        return res.status(400).json({ message: 'numTramite y nuevoNumTramite son requeridos' });
+      }
+
+      // Llamar al servicio para actualizar el número de trámite
+      const clienteActualizado = await clientService.updateNumTramiteByNumTramite(numTramite, nuevoNumTramite);
+
+      if (!clienteActualizado) {
+        return res.status(404).json({ message: 'Cliente no encontrado' });
+      }
+
+      return res.status(200).json({ message: 'Número de trámite actualizado', cliente: clienteActualizado });
+    } catch (error) {
+      return res.status(500).json({ message: 'Error al actualizar número de trámite', error: error.message });
+    }
+  }
   
 }

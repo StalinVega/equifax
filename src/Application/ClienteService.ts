@@ -87,5 +87,24 @@ public async getClientsByUserIdAndProcess(userId: number, idProceso?: number, pa
   return formattedClientes;
 }
 
+
+async updateNumTramiteByNumTramite(numTramite: string, nuevoNumTramite: string): Promise<Cliente | null> {
+  // Buscar el cliente usando el numTramite existente
+  const cliente = await Cliente.findOne({
+      where: { numTramite },
+      order: [['createdAt', 'DESC']], // Ordena por fecha de creación en orden descendente
+  });
+
+  // Si el cliente existe, actualiza el campo numTramite con el nuevo valor
+  if (cliente) {
+      cliente.numTramite = nuevoNumTramite;
+      await cliente.save(); // Guarda los cambios en la base de datos
+      return cliente; // Devuelve el cliente actualizado
+  }
+
+  // Si no se encuentra el cliente, devuelve null o lanza un error según tu preferencia
+  return null;
+}
+
 }
 

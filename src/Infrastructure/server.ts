@@ -30,7 +30,8 @@ app.post("/add-cliente", clienteController.createClient);
 app.post("/usuario/proceso",accesoProcesoController.obtenerProcesosPorUsuario);
 //Ingresar Numero de tramite deacuerdo al numero de cedula
 app.post("/cedula-tramite",clienteController.updateNumTramiteByCedula)
-
+// Actualziar el numero de tramite
+app.put('/clientes/update-num-tramite', clienteController.updateNumTramite);
 // Ruta para obtener los clientes vinculados a un usuario
 app.get('/clientes/:userId', clienteController.getClientsByUserIdAndProcess);
 
