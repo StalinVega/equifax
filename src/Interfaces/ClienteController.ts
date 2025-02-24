@@ -105,7 +105,7 @@ export class ClienteController{
 
       return res.status(200).json({ message: 'Número de trámite actualizado', cliente: clienteActualizado });
     } catch (error) {
-      return res.status(500).json({ message: 'Error al actualizar número de trámite', error: error.message });
+      return res.status(500).json({ message: 'Error al actualizar número de trámite', error: error });
     }
   }
   
