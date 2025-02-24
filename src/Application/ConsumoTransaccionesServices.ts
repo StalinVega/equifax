@@ -3,27 +3,50 @@ import { ConsumoTransacciones } from "../Domain/Models/consumoTransacciones";
 import { PaqueteTransacciones } from "../Domain/Models/PaquetesTransacciones";
 import { Solicitud } from "../Domain/Models/Solicitud";
 import { Usuario } from "../Domain/Models/Usuario";
-
+import { Op } from "sequelize";
 
 
 export class ConsumoTransaccionesService {
     public async consumirTransaccion(data: any) {
         const transaction = await sequelize.transaction(); // Iniciamos una transacción
         console.log("Datos recibidos:", data);
+    
         if (!data.idPaquete || !data.idSolicitud || !data.cantidadUsada) {
             throw new Error("Datos incompletos para la transacción");
         }
+    
         try {
-            // 1️⃣ Verificar que el paquete existe y bloquear la fila para evitar condiciones de carrera
-            const paquete = await PaqueteTransacciones.findOne({
+            // 1️⃣ Buscar el paquete inicial para obtener idEmpresa e idProceso
+            const paqueteInicial = await PaqueteTransacciones.findOne({
                 where: { id_paquete: data.idPaquete },
-                lock: transaction.LOCK.UPDATE, // Bloquea la fila hasta que termine la transacción
+                lock: transaction.LOCK.UPDATE, // Bloquear la fila para evitar condiciones de carrera
                 transaction,
             });
-            console.log()
-            if (!paquete) throw new Error('Paquete no encontrado');
     
-            // 2️⃣ Verificar que la solicitud existe
+            if (!paqueteInicial) {
+                throw new Error('Paquete no encontrado');
+            }
+    
+            const idEmpresa = paqueteInicial.idEmpresa;
+            const idProceso = paqueteInicial.idProceso;
+    
+            // 2️⃣ Buscar todos los paquetes activos para la empresa y proceso
+            const paquetes = await PaqueteTransacciones.findAll({
+                where: {
+                    idEmpresa: idEmpresa,
+                    idProceso: idProceso,
+                    cantidadRestante: { [Op.gt]: 0 }, // Solo paquetes con saldo disponible
+                },
+                order: [['fechaCompra', 'ASC']], // Ordenar por fecha de compra (más antiguo primero)
+                lock: transaction.LOCK.UPDATE, // Bloquear las filas para evitar condiciones de carrera
+                transaction,
+            });
+    
+            if (paquetes.length === 0) {
+                throw new Error('No hay paquetes disponibles para este proceso');
+            }
+    
+            // 3️⃣ Verificar que la solicitud existe
             const solicitud = await Solicitud.findOne({
                 where: { id_solicitud: data.idSolicitud },
                 transaction,
@@ -31,29 +54,48 @@ export class ConsumoTransaccionesService {
     
             if (!solicitud) throw new Error('Solicitud no encontrada');
     
-            // 3️⃣ Verificar que el usuario de la solicitud pertenece a la misma empresa que el paquete
+            // 4️⃣ Verificar que el usuario de la solicitud pertenece a la misma empresa
             const usuario = await Usuario.findOne({
                 where: { id_usuario: solicitud.idUsuario },
                 transaction,
             });
     
-            if (!usuario || usuario.idEmpresa !== paquete.idEmpresa) {
+            if (!usuario || usuario.idEmpresa !== idEmpresa) {
                 throw new Error('El usuario de la solicitud no pertenece a la empresa del paquete');
             }
     
-            // 4️⃣ Verificar saldo suficiente en el paquete
-            if (paquete.cantidadRestante < data.cantidadUsada) {
-                throw new Error('Saldo insuficiente en el paquete');
+            let cantidadRestante = data.cantidadUsada;
+            let paqueteSeleccionado = null;
+    
+            // 5️⃣ Recorrer los paquetes y consumir la cantidad necesaria
+            for (const paquete of paquetes) {
+                if (cantidadRestante <= 0) break; // Si ya se consumió la cantidad necesaria, salir del bucle
+    
+                if (paquete.cantidadRestante >= cantidadRestante) {
+                    // Si el paquete tiene suficiente saldo, consumir todo
+                    paquete.cantidadRestante -= cantidadRestante;
+                    cantidadRestante = 0;
+                    paqueteSeleccionado = paquete;
+                } else {
+                    // Si el paquete no tiene suficiente saldo, consumir lo que haya y pasar al siguiente
+                    cantidadRestante -= paquete.cantidadRestante;
+                    paquete.cantidadRestante = 0;
+                }
+    
+                await paquete.save({ transaction });
             }
     
-            // 5️⃣ Actualizar la cantidad restante en el paquete
-            paquete.cantidadRestante -= data.cantidadUsada;
-            await paquete.save({ transaction });
+            if (cantidadRestante > 0) {
+                throw new Error('No hay suficiente saldo en los paquetes para completar la transacción');
+            }
+            if (!paqueteSeleccionado) {
+                throw new Error('No se seleccionó ningún paquete para registrar el consumo');
+            }
     
             // 6️⃣ Registrar el consumo
             const consumo = await ConsumoTransacciones.create(
                 {
-                    idPaquete: data.idPaquete,
+                    idPaquete: paqueteSeleccionado.idPaquete,
                     idSolicitud: data.idSolicitud,
                     cantidadUsada: data.cantidadUsada,
                     fechaConsumo: data.fechaConsumo,
