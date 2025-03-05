@@ -74,7 +74,7 @@ public async getClientsByUserIdAndProcess(userId: number, idProceso?: number, pa
     ],
     limit: limit, // Establecer el límite de resultados
     offset: offset, // Aplicar el desplazamiento
-    order: [['fechaCreacion', 'DESC']], // Ordenar por fechaCreacion de más nuevo a más antiguo
+    order: [['createdAt', 'DESC']], // Ordenar por fechaCreacion de más nuevo a más antiguo
   });
 
   // Transformación de la respuesta para aplanar idProceso en cada cliente

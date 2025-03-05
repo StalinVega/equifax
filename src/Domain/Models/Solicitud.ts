@@ -10,6 +10,8 @@ export class Solicitud extends Model {
   public idProceso!: number;
   public idUsuario!: number;
   public createdAt!: Date;
+  // Definir la relación con Cliente
+  public readonly Cliente?: Cliente; // Agrega esta propiedad
 
   // Transformacion de la fecha y hora
   public toJSON() {
